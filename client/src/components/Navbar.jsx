@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { assets } from '../assets/assets'
-import {MenuIcon, SearchIcon, XIcon} from 'lucide-react'
+import {MenuIcon, SearchIcon, TicketPlus, XIcon} from 'lucide-react'
+import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
 
 const Navbar = () => {
   const [isOpen,setIsOpen]= useState(false)
+  const {user}= useUser()
+  const {openSignIn}= useClerk()
+  const navigate = useNavigate()
   return (
     <div className='fixed top-0 left-0 w-full flex justify-between z-50 items-center px-6 md:px-16 lg:px-32 py-5'>
       <Link to='/'>
@@ -25,7 +29,18 @@ const Navbar = () => {
 
         <div className='flex gap-8 items-center max-md:mr-10'>
           <SearchIcon className='w-6 h-6 cursor-pointer'></SearchIcon>
-          <button className='px-6 py-1 max-md:px-2 bg-primary hover:bg-primary-dull rounded-full transition cursor-pointer font-medium'>Login</button>
+          {
+            !user? (
+              <button className='px-6 py-1 max-md:px-2 bg-primary hover:bg-primary-dull rounded-full transition cursor-pointer font-medium' onClick={openSignIn}>Login</button>
+            ) : (
+              <UserButton>
+                <UserButton.MenuItems>
+                  <UserButton.Action label='Bookings' labelIcon={<TicketPlus width={15}/>} onClick={()=>navigate('/my-bookings')}></UserButton.Action>
+                </UserButton.MenuItems>
+              </UserButton>
+            )
+          }
+          
         </div>
       
 
