@@ -40,11 +40,7 @@ const Navbar = () => {
               </UserButton>
             )
           }
-          
         </div>
-      
-
-
     </div>
   )
 }
